@@ -1,12 +1,14 @@
 import Head from 'next/head'
 import {useState, useEffect, useMemo} from 'react';
 import cn from 'classnames';
+import { useRouter } from 'next/router'
 import Image from 'next/image';
 import { readAllData } from "@/api/list";
 import {PageHeader, Button, Input, LoadingIndicator} from '@/components';
-import styles from '@/styles/index.module.scss';
+import styles from './index.module.scss';
 
 export default function Home() {
+  const router = useRouter()
   const [listAllCommodity, setListAllCommodity] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [page, setPage] = useState(10);
@@ -63,8 +65,8 @@ export default function Home() {
             <h2>{title}</h2>
           }
           right={
-            <Button variant="primary" icons="add"> 
-              Tambah Sumber Perikanan
+            <Button variant="primary" icons="add" onClick={()=> router.push('/add-commodity')}> 
+              Tambah Komoditas
             </Button>
           }
         />

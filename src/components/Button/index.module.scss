@@ -6,16 +6,25 @@
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  &:focus {
-    outline: none;
-  }
-  &:hover {
-    transform: translateY(-0.2rem);
-  }
   &.primary {
     background: var(--primary);
     color: white;
+    &.outline {
+      border: 1px solid var(--primary);
+      background-color: white;
+      color: var(--primary);
+    }
+  }
+  &:focus {
+    outline: none;
+  }
+  &:hover:not(:disabled) {
+    transform: translateY(-0.2rem);
+  }
+  &:disabled {
+    background: #cdcdcd;
+    cursor: not-allowed;
   }
 }
