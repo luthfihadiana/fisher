@@ -1,7 +1,73 @@
-.header {
+@import './breakpoints';
+
+.search{
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
   margin-bottom: 1.6rem;
+  &Input {
+    width: 90%;
+  }
+}
+
+.listCommodity {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.6rem;
+  height: 100%;
+  @include max-media(tablet) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include max-media(mobile) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.commodity {
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.04), 0px 2px 6px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  transition: 0.2s all ease;
+  & > * :not(:last-child) {
+    margin-bottom: 0.8rem;
+  }
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-0.4rem);
+  }
+  &Image {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    width: 100%;
+  }
+  &Info {
+    padding: 0.8rem;
+  }
+  &Price {
+    font-weight: bold;
+  }
+  &Place {
+    font-size: 1.2rem;
+    color: grey;
+  }
+  &Size {
+    color: grey;
+  }
+  &Empty {
+    color: #cdcdcd;
+  }
+}
+
+.loadingMore{
+  position: sticky;
+  bottom: 1.6rem;
+  right: 50%;
+  display: grid;
+  place-items: center;
+  margin: 1.6rem;
 }
