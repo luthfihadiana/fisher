@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import {useState, useEffect, useMemo} from 'react';
 import cn from 'classnames';
+import Image from 'next/image';
 import { readAllData } from "@/api/list";
 import {PageHeader, Button, Input, LoadingIndicator} from '@/components';
 import styles from '@/styles/index.module.scss';
@@ -85,7 +86,9 @@ export default function Home() {
             (commodity?.list?.length > 0 &&
               commodity?.list?.map((el, idx) => (
                 <div className={styles.commodity} key={el.uuid + idx}>
-                  <img
+                  <Image
+                    width="100"
+                    height="100"
                     src="/fish.jpg"
                     className={styles.commodityImage}
                     alt="commodityImage"
@@ -103,7 +106,7 @@ export default function Home() {
                 </div>
               ))) || (
               <p className={styles.commodityEmpty}>
-                Tidak ada komoditas bernama '{searchName}'
+                Tidak ada komoditas bernama {`'searchName'`}
               </p>
             )}
         </div>
