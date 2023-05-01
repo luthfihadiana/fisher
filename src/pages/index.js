@@ -1,40 +1,61 @@
 import Head from 'next/head'
-import {useState, useEffect, useMemo} from 'react';
+import {useState, useMemo, useRef} from 'react';
 import cn from 'classnames';
 import { useRouter } from 'next/router'
 import Image from 'next/image';
-import { readAllData } from "@/api/list";
-import {PageHeader, Button, Input, LoadingIndicator} from '@/components';
+import {useListData} from '@/hooks';
+import {PageHeader, Button, Input, LoadingIndicator, Modal} from '@/components';
+import Filter from '@/modules/Home/Filter';
 import styles from './index.module.scss';
 
 export default function Home() {
   const router = useRouter()
-  const [listAllCommodity, setListAllCommodity] = useState([]);
   const [searchName, setSearchName] = useState("");
   const [page, setPage] = useState(10);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const data = await readAllData();
-      const filtered = data.filter(el => el.uuid);
-      setListAllCommodity(filtered);
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+  const [filters, setFilters] = useState({});
+  const {data: listAllCommodity, loading} = useListData();
+  const refFilterModal = useRef(null);
 
   const commodity = useMemo(()=> {
+    let dataCommodity = [...listAllCommodity];
+    console.log(dataCommodity);
+    console.log(filters);
+
+    if(filters?.price){
+      dataCommodity = dataCommodity.filter(
+        el =>
+          el.price &&
+          el.price.includes(filters?.price)
+      );
+    }
+
+    if(filters?.size){
+      dataCommodity = dataCommodity.filter(
+        el =>
+          el?.size &&
+          el?.size === filters?.size
+      );
+    }
+
+    if(filters?.location){
+      const [area_kota,area_provinsi] = filters?.location?.split(",");
+      dataCommodity = dataCommodity.filter(
+        el =>
+          el?.area_kota &&
+          el?.area_provinsi && 
+          el?.area_kota.toLowerCase() === area_kota.toLowerCase() &&
+          el?.area_provinsi.toLowerCase() === area_provinsi.toLowerCase()
+      );
+    }
+
     if (searchName === ''){
-      const hasNextPage = page < listAllCommodity?.length;
+      const hasNextPage = page < dataCommodity?.length;
       return{
-        list: hasNextPage ? listAllCommodity?.slice(0, page) :  listAllCommodity,
+        list: hasNextPage ? dataCommodity?.slice(0, page) :  dataCommodity,
         hasNextPage,
       }
     }
 
-    const dataCommodity = [...listAllCommodity];
     const filteredComodity = dataCommodity.filter(
       el =>
         el.komoditas &&
@@ -45,12 +66,24 @@ export default function Home() {
       list: hasNextPage ? filteredComodity?.slice(0, page) :  filteredComodity,
       hasNextPage,
     }
-  },[listAllCommodity, searchName, page]);
+  },[listAllCommodity, searchName, page, filters]);
 
   const title = useMemo(() =>  (searchName && searchName !== '' && `Pencarian untuk '${searchName}'`) ||
   "List Komoditas", [searchName]);
 
-  
+  const onSubmitFilter = (data) =>{
+    setFilters({
+      location: data?.location?.value,
+      size: data?.size?.value,
+      price: data?.price,
+    })
+    refFilterModal.current.hideModal();
+  }
+
+  const handlerShowFilterModal = () => {
+    refFilterModal.current.showModal();
+  };
+
   return (
     <>
       <Head>
@@ -78,6 +111,7 @@ export default function Home() {
             className={styles.searchInput}
             placeholder="Ketik nama komoditas yang dicari"
           />
+          <Button variant="primary" icons="filter_alt" onClick={handlerShowFilterModal}/>
         </div>
         <div
           className={
@@ -108,7 +142,7 @@ export default function Home() {
                 </div>
               ))) || (
               <p className={styles.commodityEmpty}>
-                Tidak ada komoditas bernama {`'searchName'`}
+                Data kosong
               </p>
             )}
         </div>
@@ -117,6 +151,9 @@ export default function Home() {
             Load More
           </Button>
         </div>}
+        <Modal title="Filter" ref={refFilterModal}>
+          <Filter onSubmit={onSubmitFilter} />
+        </Modal>
       </main>
     </>
   )

@@ -8,8 +8,9 @@ import { v4 as uuidv4 } from "uuid";
 import {PageHeader, Button, Input, Controller, Modal} from '@/components';
 import {addList} from '@/api';
 import {useLocationData, useSizeData} from '@/hooks';
-import styles from './index.module.scss';
 import schema from '@/schema/addCommodity';
+import formStyles from '@/styles/form.module.scss';
+import styles from './index.module.scss';
 
 export default function AddCommodity(){
   const { reset, control, handleSubmit } = useForm({
@@ -18,7 +19,7 @@ export default function AddCommodity(){
       komoditas: "",
       location: null,
       size: null,
-      price: "",
+      price: null,
     }
   });
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function AddCommodity(){
   const onSubmit = data => {
     setIsSubmit(true);
     const {size, komoditas, price, location} = data;
-    const [area_provinsi, area_kota] = location?.value?.split(",");
+    const [area_kota, area_provinsi] = location?.value?.split(",");
     addList({
       komoditas,
       area_provinsi,
@@ -74,11 +75,11 @@ export default function AddCommodity(){
           }
           left={<h2>Tambah Komoditas</h2>}
         />
-        <form className={styles.form}>
-          <div className={styles.formSection}>
-            <div className={styles.formFieldGroup}>
-              <div className={styles.formField}>
-                <label className={styles.formLabel}>Nama Komoditas</label>
+        <form className={formStyles.form}>
+          <div className={formStyles.formSection}>
+            <div className={formStyles.formFieldGroup}>
+              <div className={formStyles.formField}>
+                <label className={formStyles.formLabel}>Nama Komoditas</label>
                 <Controller
                   control={control}
                   name="komoditas"
@@ -90,9 +91,9 @@ export default function AddCommodity(){
                 </Controller>
               </div>
             </div>
-            <div className={styles.formFieldGroup}>
-              <div className={styles.formField}>
-                <label className={styles.formLabel}>Lokasi</label>
+            <div className={formStyles.formFieldGroup}>
+              <div className={formStyles.formField}>
+                <label className={formStyles.formLabel}>Lokasi</label>
                 <Controller control={control} name="location">
                   <Input
                     type="dropdown"
@@ -101,32 +102,32 @@ export default function AddCommodity(){
                   />
                 </Controller>
               </div>
-              <div className={styles.formField}>
-                <label className={styles.formLabel}>Ukuran</label>
-                <div className={styles.formInputContainer}>
+              <div className={formStyles.formField}>
+                <label className={formStyles.formLabel}>Ukuran</label>
+                <div className={formStyles.formInputContainer}>
                   <Controller control={control} name="size">
                     <Input
                       type="dropdown"
-                      className={styles.inputDropdown}
+                      className={formStyles.inputDropdown}
                       options={sizeData}
                       placeholder="Pilih Ukuran Komoditas"
                     />
                   </Controller>
-                  <span className={styles.formCurrency}>CM</span>
+                  <span className={formStyles.formCurrency}>CM</span>
                 </div>
               </div>
             </div>
-            <div className={styles.formFieldGroup}>
-              <div className={styles.formField}>
-                <label className={styles.formLabel}>Harga</label>
-                <div className={styles.formInputContainer}>
-                  <span className={styles.formCurrency}>Rp.</span>
+            <div className={formStyles.formFieldGroup}>
+              <div className={formStyles.formField}>
+                <label className={formStyles.formLabel}>Harga</label>
+                <div className={formStyles.formInputContainer}>
+                  <span className={formStyles.formCurrency}>Rp.</span>
                   <Controller
                     control={control}
                     name="price"
                   >
                     <Input
-                      className={styles.input}
+                      className={formStyles.input}
                       type="number"
                       placeholder="Masukkan harga komoditas ...."
                     />
@@ -135,10 +136,10 @@ export default function AddCommodity(){
               </div>
             </div>
           </div>
-          <div className={cn(styles.formSection,styles.formSubmitContainer)}>
+          <div className={cn(formStyles.formSection,formStyles.formSubmitContainer)}>
             <Button
               variant="primary"
-              className={styles.formSubmit}
+              className={formStyles.formSubmit}
               disabled={!checkValidData() || isSubmit}
               onClick={handleSubmit(onSubmit)}
             >

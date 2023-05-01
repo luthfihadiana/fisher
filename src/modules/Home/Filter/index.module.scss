@@ -1,0 +1,16 @@
+.buttonConfirm {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+  margin-top: 1.6rem;
+}
+
+.label{
+  display: flex;
+  justify-content: space-between;
+}
+
+.clear{
+  color: var(--primary)
+}
