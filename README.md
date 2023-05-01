@@ -2,6 +2,16 @@
 
 A simple application to see commodity price in aquaculture and also user can add commodity price
 
+Homepage
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/32569977/235436077-6b10e069-15ab-4e4a-96da-f0c3223b7688.png">
+
+Add Commodity Page
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/32569977/235436130-3d02ad52-6da1-4051-8e07-94edcfe3b8f9.png">
+
+Filter List
+<img width="1440" alt="image" src="https://user-images.githubusercontent.com/32569977/235436206-b244c4b8-5d71-4bf5-804b-23111a86a3d5.png">
+
+
 ## Hosting
 
 https://fisher-chi.vercel.app/
