@@ -27,6 +27,7 @@ https://fisher-chi.vercel.app/
 - uuid
 - scss
 - classnames
+- next-pwa
 
 ## Setup
 
