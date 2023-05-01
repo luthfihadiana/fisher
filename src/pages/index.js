@@ -5,21 +5,23 @@ import { useRouter } from 'next/router'
 import Image from 'next/image';
 import {useListData} from '@/hooks';
 import {PageHeader, Button, Input, LoadingIndicator, Modal} from '@/components';
+import { SORT_OPTIONS } from '@/constants';
 import Filter from '@/modules/Home/Filter';
 import styles from './index.module.scss';
+import { sortingListCommodity } from '@/utils';
 
 export default function Home() {
   const router = useRouter()
   const [searchName, setSearchName] = useState("");
   const [page, setPage] = useState(10);
   const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState(SORT_OPTIONS[0]);
   const {data: listAllCommodity, loading} = useListData();
   const refFilterModal = useRef(null);
 
   const commodity = useMemo(()=> {
-    let dataCommodity = [...listAllCommodity];
-    console.log(dataCommodity);
-    console.log(filters);
+    const sortField = sort?.value?.split('_')[0];
+    let dataCommodity = sortingListCommodity(sortField, [...listAllCommodity], sort?.order);
 
     if(filters?.price){
       dataCommodity = dataCommodity.filter(
@@ -66,7 +68,7 @@ export default function Home() {
       list: hasNextPage ? filteredComodity?.slice(0, page) :  filteredComodity,
       hasNextPage,
     }
-  },[listAllCommodity, searchName, page, filters]);
+  },[listAllCommodity, searchName, page, filters, sort]);
 
   const title = useMemo(() =>  (searchName && searchName !== '' && `Pencarian untuk '${searchName}'`) ||
   "List Komoditas", [searchName]);
@@ -98,9 +100,18 @@ export default function Home() {
             <h2>{title}</h2>
           }
           right={
-            <Button variant="primary" icons="add" onClick={()=> router.push('/add-commodity')}> 
-              Tambah Komoditas
-            </Button>
+            <div className={styles.action}>
+              <Input 
+                type="dropdown" 
+                className={styles.sort} 
+                options={SORT_OPTIONS} 
+                value={sort} 
+                onChange={(e)=>setSort(e)}
+              />
+              <Button variant="primary" icons="add" onClick={()=> router.push('/add-commodity')}> 
+                Tambah Komoditas
+              </Button>
+            </div>
           }
         />
         <div className={styles.search}>

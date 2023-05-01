@@ -82,3 +82,15 @@
   gap: 0.8rem;
   margin-top: 1.6rem;
 }
+
+.action{
+  display: flex;
+  gap: 0.8rem;
+  @include max-media(mobile) {
+    flex-direction: column;
+  }
+}
+
+.sort {
+  min-width: 200px;
+}
